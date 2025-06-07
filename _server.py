@@ -19,10 +19,10 @@ import urllib.parse
 import os
 import qrcode
 import string
-import random
 from datetime import datetime
 from dotenv import load_dotenv
 import uuid
+import secrets
 
 load_dotenv()
 
@@ -47,7 +47,7 @@ configure_uploads(app, (photos))
 
 def generate_random_user_id(length=8):
     characters = string.ascii_letters + string.digits
-    random_user_id = ''.join(random.choice(characters) for i in range(length))
+    random_user_id = ''.join(secrets.choice(characters) for i in range(length))
     return random_user_id
 
 
@@ -165,8 +165,7 @@ def admin():
 
     if request.method == 'POST':
         uid_gen = generate_random_user_id()
-        password = ''.join(random.choices(
-            string.ascii_letters + string.digits, k=10))
+        password = ''.join(secrets.SystemRandom().choices(string.ascii_letters + string.digits, k=10))
         user = User(uid=uid_gen, name="Colocar Nombre", birthday=datetime.now(), death_date=None, details='{"cemeteryName": "None", "cemeteryAddress": "None", "googleMapsLink": "None"}',
             bio='I love this platform!', image_file='abstract-user-flat-4.png', youtube_links='example.com')
         user.set_password(password)
